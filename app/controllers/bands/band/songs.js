@@ -1,7 +1,8 @@
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { Song } from 'rarwe/routes/bands';
+import Song from 'rarwe/models/song';
+import { service } from '@ember/service';
 
 export default class BandsBandSongsController extends Controller {
   @tracked showAddSong = true;
@@ -10,6 +11,8 @@ export default class BandsBandSongsController extends Controller {
   get hasNoTitle() {
     return !this.title;
   }
+
+  @service catalog;
 
   @action
   updateTitle(event) {
@@ -20,6 +23,7 @@ export default class BandsBandSongsController extends Controller {
   saveSong() {
     let song = new Song({ title: this.title, band: this.model });
     this.model.songs = [...this.model.songs, song];
+    this.catalog.add('song', song);
     this.title = '';
     this.showAddSong = true;
   }
