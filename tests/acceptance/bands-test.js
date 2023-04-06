@@ -28,12 +28,12 @@ module('Acceptance | bands', function (hooks) {
   test('Create a band', async function (assert) {
     this.server.create('band', { name: 'Royal Blood' });
     await visit('/');
-    await click('a[href="/bands/new"]');
-    await fillIn('input', 'Caspian');
-    await click('button');
-    await waitFor('p.text-center');
+    await click('[data-test-rr="new-band-button"]');
+    await fillIn('[data-test-rr="new-band-name"]', 'Caspian');
+    await click('[data-test-rr="save-band-button"]');
+    await waitFor('[data-test-rr="no-songs-text"]');
 
-    let bandLinks = document.querySelectorAll('.mb-2 > a');
+    let bandLinks = document.querySelectorAll('[data-test-rr="band-link"]');
 
     // eslint-disable-next-line qunit/assert-args
     assert.strictEqual(
@@ -48,7 +48,7 @@ module('Acceptance | bands', function (hooks) {
     );
     assert.ok(
       document
-        .querySelector('.border-b-4.border-purple-400')
+        .querySelector('[data-test-rr="songs-nav-item"]')
         .textContent.includes('Songs'),
       'The Songs tab is active'
     );
